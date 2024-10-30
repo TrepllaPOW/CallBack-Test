@@ -1,124 +1,51 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login com Discord</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Raposyxz</title>
+    <meta property="og:title" content="Raposyxz" />
+    <meta name="theme-color" id="themeColorMeta" content="#fd5b6e" />
+    <meta property="og:description" content="Conheça a Raposyxz! um cantinho para você!" />
+    <meta property="og:image" content="https://i.postimg.cc/Pxb9QVL4/1726399378726.png" />
+    <meta property="og:url" content="https://raposyxz.fun/home" />
+    <link rel="icon" href="https://i.postimg.cc/Pxb9QVL4/1726399378726.png" type="image/png" />
+    <link rel="stylesheet" href="/configs/style.css" />
+    <link rel="stylesheet" href="/configs/menu.css" />
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background-color: #2C2F33;
-            color: white;
-            position: relative;
+        body.dark-theme {
+            background-color: #282a36;
+            color: #282a36;
         }
-        h1 {
-            margin-bottom: 20px;
-        }
-        button {
-            padding: 10px 20px;
-            margin: 5px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            background-color: #7289DA;
-            color: white;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #5B6EAE;
-        }
-        #logout {
-            background-color: #D9534F;
-            position: absolute;
-            bottom: 20px;
-        }
-        #logout:hover {
-            background-color: #C9302C;
-        }
-        #user-info {
-            margin-top: 20px;
-            text-align: center;
-        }
-        img {
+
+        .avatar {
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            width: 100px;
-            height: 100px;
+            vertical-align: middle;
         }
     </style>
 </head>
 <body>
-    <h1 id="login-title">Login com Discord</h1>
-    <button id="login">Login com Discord</button>
-    <button id="logout" style="display:none;">Logout</button>
-    <div id="user-info" style="display:none;">
-        <h2>Bem-vindo, <span id="username"></span>!</h2>
-        <img id="avatar" src="" alt="Avatar">
+    <div class="stars" id="stars"></div>
+    <div class="container">
+        <div id="mySidenav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a href="/flokisita">Bot</a>
+            <a href="/sobre">Sobre</a>
+            <a id="authMenu" href="/auth/discord">Logar</a>
+        </div>
+        <button id="openMenuBtn" onclick="openNav()">👻</button>
+
+        <img class="logo" />
+        <div class="title" style="font-size: 43px">Raposyxz</div>
+        <div class="description" style="font-size: 21px">Um cantinho para se acalmar</div>
+        
+        <button id="themeToggleBtn">🌇</button>
+        <audio id="audioPlayer"></audio>
     </div>
 
-    <script>
-        const clientId = '1298456196390326272';
-        const redirectUri = 'https://call-back-test.vercel.app/';
-
-        document.getElementById('login').onclick = function() {
-            const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=identify`;
-            window.location.href = authUrl;
-        };
-
-        document.getElementById('logout').onclick = function() {
-            localStorage.removeItem('discord_token');
-            location.reload();
-        };
-
-        function fetchUserData() {
-            const token = localStorage.getItem('discord_token');
-            if (!token) return;
-
-            fetch('https://discord.com/api/users/@me', {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            })
-            .then(response => {
-                if (response.status === 401) {
-                    localStorage.removeItem('discord_token');
-                    return;
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data) {
-                    document.getElementById('username').innerText = data.username;
-                    document.getElementById('avatar').src = `https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png`;
-                    document.getElementById('user-info').style.display = 'block';
-                    document.getElementById('login').style.display = 'none'; // Esconde o botão de login
-                    document.getElementById('login-title').style.display = 'none'; // Esconde o título
-                    document.getElementById('logout').style.display = 'inline'; // Mostra o botão de logout
-                }
-            })
-            .catch(console.error);
-        }
-
-        function saveToken() {
-            const hash = window.location.hash;
-            if (!hash) return;
-
-            const token = new URLSearchParams(hash.substring(1)).get('access_token');
-            if (token) {
-                localStorage.setItem('discord_token', token);
-                window.location.hash = '';
-                location.reload();
-            }
-        }
-
-        window.onload = function() {
-            fetchUserData();
-            saveToken();
-        };
-    </script>
+    <script src="/configs/script.js"></script>
+    <script src="/configs/auth.js"></script>
 </body>
 </html>
