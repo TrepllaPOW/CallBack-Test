@@ -31,6 +31,12 @@
         button:hover {
             background-color: #5B6EAE;
         }
+        #logout {
+            background-color: #D9534F;
+        }
+        #logout:hover {
+            background-color: #C9302C;
+        }
         #user-info {
             margin-top: 20px;
             text-align: center;
@@ -86,7 +92,8 @@
                     document.getElementById('username').innerText = data.username;
                     document.getElementById('avatar').src = `https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png`;
                     document.getElementById('user-info').style.display = 'block';
-                    document.getElementById('logout').style.display = 'inline';
+                    document.getElementById('login').style.display = 'none'; // Esconde o botão de login
+                    document.getElementById('logout').style.display = 'inline'; // Mostra o botão de logout
                 }
             })
             .catch(console.error);
