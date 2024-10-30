@@ -4,30 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login com Discord</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #2C2F33;
+            color: white;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #7289DA;
+            color: white;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #5B6EAE;
+        }
+        #user-info {
+            margin-top: 20px;
+            text-align: center;
+        }
+        img {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+        }
+    </style>
 </head>
 <body>
     <h1>Login com Discord</h1>
     <button id="login">Login com Discord</button>
+    <button id="logout" style="display:none;">Logout</button>
     <div id="user-info" style="display:none;">
         <h2>Bem-vindo, <span id="username"></span>!</h2>
-        <img id="avatar" src="" alt="Avatar" style="border-radius: 50%; width: 100px; height: 100px;">
+        <img id="avatar" src="" alt="Avatar">
     </div>
 
     <script>
-        const clientId = 'SEU_CLIENT_ID'; // Substitua pelo seu Client ID
-        const redirectUri = 'http://localhost:8000'; // Substitua pela sua URL de redirecionamento
+        const clientId = 'SEU_CLIENT_ID';
+        const redirectUri = 'http://localhost:8000';
 
         document.getElementById('login').onclick = function() {
             const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=identify`;
             window.location.href = authUrl;
         };
 
-        // Função para obter informações do usuário
-        function fetchUserData() {
-            const hash = window.location.hash;
-            if (!hash) return;
+        document.getElementById('logout').onclick = function() {
+            localStorage.removeItem('discord_token');
+            location.reload();
+        };
 
-            const token = new URLSearchParams(hash.substring(1)).get('access_token');
+        function fetchUserData() {
+            const token = localStorage.getItem('discord_token');
             if (!token) return;
 
             fetch('https://discord.com/api/users/@me', {
@@ -35,17 +74,40 @@
                     'Authorization': `Bearer ${token}`
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                if (response.status === 401) {
+                    localStorage.removeItem('discord_token');
+                    return;
+                }
+                return response.json();
+            })
             .then(data => {
-                document.getElementById('username').innerText = data.username;
-                document.getElementById('avatar').src = `https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png`;
-                document.getElementById('user-info').style.display = 'block';
+                if (data) {
+                    document.getElementById('username').innerText = data.username;
+                    document.getElementById('avatar').src = `https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png`;
+                    document.getElementById('user-info').style.display = 'block';
+                    document.getElementById('logout').style.display = 'inline';
+                }
             })
             .catch(console.error);
         }
 
-        // Chama a função para buscar dados do usuário ao carregar a página
-        window.onload = fetchUserData;
+        function saveToken() {
+            const hash = window.location.hash;
+            if (!hash) return;
+
+            const token = new URLSearchParams(hash.substring(1)).get('access_token');
+            if (token) {
+                localStorage.setItem('discord_token', token);
+                window.location.hash = '';
+                location.reload();
+            }
+        }
+
+        window.onload = function() {
+            fetchUserData();
+            saveToken();
+        };
     </script>
 </body>
 </html>
