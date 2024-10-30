@@ -61,8 +61,8 @@
     </div>
 
     <script>
-        const clientId = 'SEU_CLIENT_ID';
-        const redirectUri = 'http://localhost:8000';
+        const clientId = '1298456196390326272';
+        const redirectUri = 'https://call-back-test.vercel.app/';
 
         document.getElementById('login').onclick = function() {
             const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=identify`;
