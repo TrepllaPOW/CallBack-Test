@@ -14,6 +14,7 @@
             height: 100vh;
             background-color: #2C2F33;
             color: white;
+            position: relative;
         }
         h1 {
             margin-bottom: 20px;
@@ -33,6 +34,8 @@
         }
         #logout {
             background-color: #D9534F;
+            position: absolute;
+            bottom: 20px;
         }
         #logout:hover {
             background-color: #C9302C;
@@ -49,7 +52,7 @@
     </style>
 </head>
 <body>
-    <h1>Login com Discord</h1>
+    <h1 id="login-title">Login com Discord</h1>
     <button id="login">Login com Discord</button>
     <button id="logout" style="display:none;">Logout</button>
     <div id="user-info" style="display:none;">
@@ -58,8 +61,8 @@
     </div>
 
     <script>
-        const clientId = '1298456196390326272';
-        const redirectUri = 'https://call-back-test.vercel.app/';
+        const clientId = 'SEU_CLIENT_ID';
+        const redirectUri = 'http://localhost:8000';
 
         document.getElementById('login').onclick = function() {
             const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=identify`;
@@ -93,6 +96,7 @@
                     document.getElementById('avatar').src = `https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png`;
                     document.getElementById('user-info').style.display = 'block';
                     document.getElementById('login').style.display = 'none'; // Esconde o botão de login
+                    document.getElementById('login-title').style.display = 'none'; // Esconde o título
                     document.getElementById('logout').style.display = 'inline'; // Mostra o botão de logout
                 }
             })
