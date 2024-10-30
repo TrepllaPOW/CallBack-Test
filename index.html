@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login com Discord</title>
+</head>
+<body>
+    <h1>Login com Discord</h1>
+    <button id="login">Login com Discord</button>
+    <div id="user-info" style="display:none;">
+        <h2>Bem-vindo, <span id="username"></span>!</h2>
+        <img id="avatar" src="" alt="Avatar" style="border-radius: 50%; width: 100px; height: 100px;">
+    </div>
+
+    <script>
+        const clientId = 'SEU_CLIENT_ID'; // Substitua pelo seu Client ID
+        const redirectUri = 'http://localhost:8000'; // Substitua pela sua URL de redirecionamento
+
+        document.getElementById('login').onclick = function() {
+            const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=identify`;
+            window.location.href = authUrl;
+        };
+
+        // Função para obter informações do usuário
+        function fetchUserData() {
+            const hash = window.location.hash;
+            if (!hash) return;
+
+            const token = new URLSearchParams(hash.substring(1)).get('access_token');
+            if (!token) return;
+
+            fetch('https://discord.com/api/users/@me', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('username').innerText = data.username;
+                document.getElementById('avatar').src = `https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png`;
+                document.getElementById('user-info').style.display = 'block';
+            })
+            .catch(console.error);
+        }
+
+        // Chama a função para buscar dados do usuário ao carregar a página
+        window.onload = fetchUserData;
+    </script>
+</body>
+</html>
