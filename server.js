@@ -6,9 +6,9 @@ const DiscordStrategy = require('passport-discord').Strategy;
 const app = express();
 
 passport.use(new DiscordStrategy({
-    clientID: 'YOUR_CLIENT_ID',
-    clientSecret: 'YOUR_CLIENT_SECRET',
-    callbackURL: 'http://localhost:3000/auth/discord/callback',
+    clientID: '1298456196390326272',
+    clientSecret: 'fqJxIVvdFI2OUlHMaVc0ikpQbKmxjBad',
+    callbackURL: 'https://call-back-test.vercel.app/',
     scope: ['identify', 'email']
 }, (accessToken, refreshToken, profile, done) => {
     return done(null, profile);
@@ -22,7 +22,7 @@ passport.deserializeUser((obj, done) => {
     done(null, obj);
 });
 
-app.use(session({ secret: 'your_secret_key', resave: true, saveUninitialized: true }));
+app.use(session({ secret: '123456789', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
