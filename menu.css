@@ -42,7 +42,3 @@
     color: #fd5b6e;
     cursor: pointer;
 }
-
-body.dark-theme .sidenav {
-    background-color: #282a36; /* Cor do menu em tema escuro */
-}
