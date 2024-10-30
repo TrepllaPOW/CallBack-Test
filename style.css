@@ -1,0 +1,51 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    text-align: center;
+}
+
+.logo {
+    width: 100px; /* Ajuste conforme necessário */
+    height: auto;
+}
+
+.title {
+    font-size: 43px;
+    margin: 20px 0;
+}
+
+.description {
+    font-size: 21px;
+    margin-bottom: 30px;
+}
+
+#themeToggleBtn {
+    padding: 10px 20px;
+    background-color: #fd5b6e;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#themeToggleBtn:hover {
+    background-color: #e04e6e;
+}
+
+.stars {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: url('path/to/your/stars-image.png') no-repeat center center fixed; /* Substitua pelo caminho da sua imagem */
+    background-size: cover;
+}
